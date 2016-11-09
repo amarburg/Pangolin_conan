@@ -11,14 +11,14 @@ class PangolinConan(ConanFile):
 
   def source(self):
     if os.path.isdir('pangolin'):
-      self.run('git update pangolin')
+      self.run('cd pangolin && git pull origin master')
     else:
       self.run('git clone https://github.com/stevenlovegrove/Pangolin pangolin')
 
   def build(self):
     cmake = CMake(self.settings)
     if self.options.shared:
-      cmake_opts = "-DBUILD_SHARED_LIBS=True" 
+      cmake_opts = "-DBUILD_SHARED_LIBS=True"
     self.run('cmake "%s/pangolin" %s %s' % (self.conanfile_directory, cmake.command_line, cmake_opts ))
     self.run('cmake --build . %s' % cmake.build_config)
 
