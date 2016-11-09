@@ -44,14 +44,14 @@ end
 namespace :dependencies do
 
   task :trusty do
-    # sh "sudo apt-get install -y cmake libopencv-dev libtclap-dev libboost-all-dev"
+    sh "sudo apt-get install -y cmake libglew-dev"
     sh "pip install conan"
   end
 
   task :osx do
     sh "brew update"
     # sh "brew tap homebrew/science"
-    sh "brew install conan"
+    sh "brew install glew conan"
   end
 
   namespace :travis do
