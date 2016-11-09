@@ -56,6 +56,20 @@ namespace :dependencies do
 
   namespace :travis do
     task :linux => "dependencies:trusty"
-    task :osx => "dependencies:osx"
+    task :osx => "dependencies:osx" do
+      ## Technically the compiler version should be taken from Travis.yml is known
+      File.open("~/.conan/conan.conf",'w') { |f|
+        f.write <<CONAN_CONF_END
+[settings_defaults]
+arch=x86_64
+build_type=Release
+compiler=apple-clang
+compiler.libcxx=libc++
+compiler.version=7.3
+os=Macos
+CONAN_CONF_END
+        }
+      end
+    end
   end
 end
