@@ -23,7 +23,9 @@ class PangolinConan(ConanFile):
     self.run('cmake --build . %s' % cmake.build_config)
 
   def package(self):
-    self.copy("*.h", dst="include")
+    self.copy("*.h", src="pangolin/include/", dst="include/")
+    self.copy("*.hpp", src="pangolin/include/", dst="include/")
+    self.copy("*.h", src="src/include/", dst="include/")
     if self.options.shared:
       if self.settings.os == "Macos":
           self.copy(pattern="*.dylib", dst="lib", keep_path=False)
@@ -32,5 +34,5 @@ class PangolinConan(ConanFile):
     else:
         self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
 
-  # def package_info(self):
-  #     self.cpp_info.libs = ["videoio"]
+  def package_info(self):
+      self.cpp_info.libs = ["pangolin"]
