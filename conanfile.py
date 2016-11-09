@@ -23,7 +23,7 @@ class PangolinConan(ConanFile):
     self.run('cmake --build . %s' % cmake.build_config)
 
   def package(self):
-    self.copy("*.h", dst="")
+    self.copy("*.h", dst="include")
     if self.options.shared:
       if self.settings.os == "Macos":
           self.copy(pattern="*.dylib", dst="lib", keep_path=False)
