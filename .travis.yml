@@ -11,12 +11,14 @@ matrix:
     - BUILD_TYPE=release
 #    - BUILD_TYPE=Debug
   include:
+
     - os: linux
       dist: trusty
       sudo: required
     - os: osx
       osx_image: xcode7.3
       compiler: clang
+
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install rake ; fi

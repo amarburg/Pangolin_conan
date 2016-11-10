@@ -1,11 +1,13 @@
 
 task :default => "debug:test"
 
+
 @conan_opts = { shared: 'True', build_parallel: 'False' }
 @conan_settings = {}
 @conan_scopes = { build_tests: 'True' }
 @conan_build = "missing"
 load 'config.rb' if FileTest.readable? 'config.rb'
+
 
 ['Debug','Release'].each { |build_type|
   namespace build_type.downcase.to_sym do
@@ -58,6 +60,7 @@ namespace :dependencies do
 
   namespace :travis do
     task :linux => "dependencies:trusty"
-    task :osx => "dependencies:osx"
-  end
+    task :osx => "dependencies:osx" 
+   end
+
 end
