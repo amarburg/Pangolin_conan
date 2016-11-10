@@ -61,8 +61,7 @@ namespace :dependencies do
       File.open("config.rb",'w') { |f|
         f.write <<CONAN_CONF_END
 @conan_opts[:compiler] = 'apple-clang'
-@conan_opts["compiler.version".to_sym] = '7.3'
-@conan_opts["compil"][settings_defaults]
+@conan_opts['compiler.version'.to_sym] = '7.3'
 CONAN_CONF_END
         }
       end
