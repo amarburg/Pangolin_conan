@@ -6,8 +6,8 @@ class PangolinConan(ConanFile):
   version = "master"
   url = "https://github.com/amarburg/Pangolin_conan.git"
   settings = "os", "compiler", "build_type", "arch"
-  options = {"shared": [True, False]}
-  default_options = "shared=True"
+  options = {"shared": [True, False], "build_parallel": [True, False]}
+  default_options = "shared=True", "build_parallel=True"
 
   def source(self):
     if os.path.isdir('pangolin'):
@@ -19,6 +19,9 @@ class PangolinConan(ConanFile):
     cmake = CMake(self.settings)
     if self.options.shared:
       cmake_opts = "-DBUILD_SHARED_LIBS=True"
+      
+    if self.options.build_parallel:
+      build_opts = "-- -j"
     self.run('cmake "%s/pangolin" %s %s' % (self.conanfile_directory, cmake.command_line, cmake_opts ))
     self.run('cmake --build . %s' % cmake.build_config)
 
