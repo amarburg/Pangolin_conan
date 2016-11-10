@@ -1,7 +1,7 @@
 
 task :default => "debug:test"
 
-@build_opts = {}
+@conan_opts = {shared: 'True'}
 load 'config.rb' if FileTest::exists? 'config.rb'
 
 ['Debug','Release'].each { |build_type|
@@ -11,7 +11,7 @@ load 'config.rb' if FileTest::exists? 'config.rb'
     task :build do
       FileUtils::mkdir build_dir unless FileTest::directory? build_dir
 
-      cmake_opts = ["-o shared=True"]
+      cmake_opts = @conan_opts.each_pair.map { |k,v| "-o #{k}=#{v}" }
 
       sh "conan source ."
 
@@ -58,18 +58,14 @@ namespace :dependencies do
     task :linux => "dependencies:trusty"
     task :osx => "dependencies:osx" do
       ## Technically the compiler version should be taken from Travis.yml is known
-      File.open("~/.conan/conan.conf",'w') { |f|
+      File.open("config.rb",'w') { |f|
         f.write <<CONAN_CONF_END
-[settings_defaults]
-arch=x86_64
-build_type=Release
-compiler=apple-clang
-compiler.libcxx=libc++
-compiler.version=7.3
-os=Macos
+@conan_opts[:compiler] = 'apple-clang'
+@conan_opts["compiler.version".to_sym] = '7.3'
+@conan_opts["compil"][settings_defaults]
 CONAN_CONF_END
         }
       end
-    end
-  end
+   end
+
 end
