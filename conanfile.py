@@ -17,9 +17,9 @@ class PangolinConan(ConanFile):
 
   def build(self):
     cmake = CMake(self.settings)
-    if self.options.shared:
-      cmake_opts = "-DBUILD_SHARED_LIBS=True"
-      
+    cmake_opts = "-DFORCE_GLUT=True "
+    cmake_opts += "-DBUILD_SHARED_LIBS=True" if self.options.shared else ""
+
     if self.options.build_parallel:
       build_opts = "-- -j"
     self.run('cmake "%s/pangolin" %s %s' % (self.conanfile_directory, cmake.command_line, cmake_opts ))
