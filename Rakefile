@@ -40,7 +40,7 @@ namespace :conan do
   end
 
   task :upload do
-    sh "conan upload g2o/master@amarburg/testing"
+    sh "conan upload pangolin/master@amarburg/testing"
   end
 end
 
@@ -60,7 +60,7 @@ namespace :dependencies do
 
   namespace :travis do
     task :linux => "dependencies:trusty"
-    task :osx => "dependencies:osx" 
+    task :osx => "dependencies:osx"
    end
 
 end
