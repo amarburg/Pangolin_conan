@@ -3,8 +3,9 @@ import os
 
 class PangolinConan(ConanFile):
   name = "pangolin"
-  commit = "master"
+  version = "master"
   url = "https://github.com/amarburg/Pangolin_conan.git"
+  commit = "master"
   settings = "os", "compiler", "build_type", "arch"
   options = {"shared": [True, False], "build_parallel": [True, False]}
   default_options = "shared=True", "build_parallel=True"
