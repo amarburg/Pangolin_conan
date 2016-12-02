@@ -5,6 +5,7 @@ class PangolinConan(ConanFile):
   name = "pangolin"
   version = "master"
   url = "https://github.com/amarburg/Pangolin_conan.git"
+  source_url = "https://github.com/amarburg/Pangolin.git"
   commit = "master"
   settings = "os", "compiler", "build_type", "arch"
   options = {"shared": [True, False], "build_parallel": [True, False]}
@@ -12,7 +13,7 @@ class PangolinConan(ConanFile):
 
   def source(self):
     if not os.path.isdir('pangolin'):
-      self.run('git clone %s pangolin' % self.url)
+      self.run('git clone %s pangolin' % self.source_url)
     else:
       self.run('cd pangolin && git fetch origin')
 
