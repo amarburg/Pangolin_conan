@@ -3,17 +3,19 @@ import os
 
 class PangolinConan(ConanFile):
   name = "pangolin"
-  version = "master"
+  commit = "master"
   url = "https://github.com/amarburg/Pangolin_conan.git"
   settings = "os", "compiler", "build_type", "arch"
   options = {"shared": [True, False], "build_parallel": [True, False]}
   default_options = "shared=True", "build_parallel=True"
 
   def source(self):
-    if os.path.isdir('pangolin'):
-      self.run('cd pangolin && git pull origin master')
+    if not os.path.isdir('pangolin'):
+      self.run('git clone %s pangolin' % self.url)
     else:
-      self.run('git clone https://github.com/stevenlovegrove/Pangolin pangolin')
+      self.run('cd pangolin && git fetch origin')
+
+    self.run('cd pangolin && git checkout %s' % self.commit)
 
   def build(self):
     cmake = CMake(self.settings)
