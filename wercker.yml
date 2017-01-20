@@ -1,0 +1,16 @@
+# wercker version for box creation
+box: amarburg/lsdslam-dev-host
+
+build:
+  steps:
+    - install-packages:
+      packages: python-pip
+
+    - script:
+      name: Install Conan
+      code: pip install conan
+
+    - script:
+      name: Debug test
+      code: |
+           rake debug:test
