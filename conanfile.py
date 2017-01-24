@@ -17,8 +17,8 @@ class PangolinConan(ConanFile):
 
   def build(self):
     cmake = CMake(self.settings)
-    if self.options.shared:
-      cmake_opts = "-DBUILD_SHARED_LIBS=True"
+    cmake_opts = "-DBUILD_EXAMPLES:BOOL=False "
+    cmake_opts += "-DBUILD_SHARED_LIBS=True" if self.options.shared else ""
     self.run('cmake "%s/pangolin" %s %s' % (self.conanfile_directory, cmake.command_line, cmake_opts ))
     self.run('cmake --build . %s' % cmake.build_config)
 
@@ -30,9 +30,9 @@ class PangolinConan(ConanFile):
       if self.settings.os == "Macos":
           self.copy(pattern="*.dylib", dst="lib", keep_path=False)
       else:
-          self.copy(pattern="*.so*", dst="lib", src="lib", keep_path=False)
+          self.copy(pattern="*.so*", dst="lib", keep_path=False)
     else:
-        self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
+        self.copy(pattern="*.a", dst="lib", keep_path=False)
 
   def package_info(self):
       self.cpp_info.libs = ["pangolin"]
