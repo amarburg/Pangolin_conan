@@ -1,32 +1,35 @@
 
 task :default => "debug:test"
 
-@conan_opts = {shared: 'True'}
-load 'config.rb' if FileTest::exists? 'config.rb'
+
+@conan_opts = { shared: 'True', build_parallel: 'False' }
+@conan_settings = {}
+@conan_scopes = { build_tests: 'True' }
+@conan_build = "missing"
+load 'config.rb' if FileTest.readable? 'config.rb'
+
 
 ['Debug','Release'].each { |build_type|
   namespace build_type.downcase.to_sym do
     build_dir = ENV['BUILD_DIR'] || "build-#{build_type}"
 
+    @conan_settings[:build_type] = build_type
+    conan_opts = @conan_opts.each_pair.map { |key,val| "-o %s=%s" % [key,val] } +
+                @conan_settings.each_pair.map { |key,val| "-s %s=%s" % [key,val] } +
+                @conan_scopes.each_pair.map { |key,val| "--scope %s=%s" % [key,val] }
+
     task :build do
       FileUtils::mkdir build_dir unless FileTest::directory? build_dir
-
-      cmake_opts = @conan_opts.each_pair.map { |k,v| "-o #{k}=#{v}" }
-
       sh "conan source ."
-
       chdir build_dir do
-        sh "conan install -s build_type=%s %s .. --build=missing" % [build_type, cmake_opts.join(' ')]
+        sh "conan install %s .. --build=%s" % [conan_opts.join(' '), @conan_build]
         sh "conan build .."
       end
     end
 
     task :test => :build do
-      chdir build_dir do
-      #sh "make unit_test"
+      #
     end
-    end
-
   end
 }
 
@@ -37,7 +40,7 @@ namespace :conan do
   end
 
   task :upload do
-    sh "conan upload g2o/master@amarburg/testing"
+    sh "conan upload pangolin/master@amarburg/testing"
   end
 end
 
@@ -51,20 +54,13 @@ namespace :dependencies do
   task :osx do
     sh "brew update"
     # sh "brew tap homebrew/science"
-    sh "brew install glew conan"
+    sh "brew install glew"
+    sh "pip install conan"
   end
 
   namespace :travis do
     task :linux => "dependencies:trusty"
-    task :osx => "dependencies:osx" do
-      ## Technically the compiler version should be taken from Travis.yml is known
-      File.open("config.rb",'w') { |f|
-        f.write <<CONAN_CONF_END
-@conan_opts[:compiler] = 'apple-clang'
-@conan_opts['compiler.version'.to_sym] = '7.3'
-CONAN_CONF_END
-        }
-      end
+    task :osx => "dependencies:osx"
    end
 
 end

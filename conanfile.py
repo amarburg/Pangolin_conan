@@ -5,20 +5,29 @@ class PangolinConan(ConanFile):
   name = "pangolin"
   version = "master"
   url = "https://github.com/amarburg/Pangolin_conan.git"
+  source_url = "https://github.com/amarburg/Pangolin.git"
+  commit = "master"
   settings = "os", "compiler", "build_type", "arch"
-  options = {"shared": [True, False]}
-  default_options = "shared=True"
+  options = {"shared": [True, False], "build_parallel": [True, False]}
+  default_options = "shared=True", "build_parallel=True"
 
   def source(self):
-    if os.path.isdir('pangolin'):
-      self.run('cd pangolin && git pull origin master')
+    if not os.path.isdir('pangolin'):
+      self.run('git clone %s pangolin' % self.source_url)
     else:
-      self.run('git clone https://github.com/stevenlovegrove/Pangolin pangolin')
+      self.run('cd pangolin && git fetch origin')
+
+    self.run('cd pangolin && git checkout %s' % self.commit)
 
   def build(self):
     cmake = CMake(self.settings)
-    cmake_opts = "-DBUILD_EXAMPLES:BOOL=False "
+
+    cmake_opts = "-DFORCE_GLUT=True  -DBUILD_EXAMPLES:BOOL=False"
     cmake_opts += "-DBUILD_SHARED_LIBS=True" if self.options.shared else ""
+
+    if self.options.build_parallel:
+      build_opts = "-- -j"
+
     self.run('cmake "%s/pangolin" %s %s' % (self.conanfile_directory, cmake.command_line, cmake_opts ))
     self.run('cmake --build . %s' % cmake.build_config)
 
