@@ -12,4 +12,5 @@ build:
       name: Upload to conan.io
       code: |
         conan user -p "$CONAN_PASSWORD" $CONAN_USERNAME
+	conan export
         conan upload "pangolin*" --confirm
