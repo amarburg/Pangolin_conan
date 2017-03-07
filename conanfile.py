@@ -5,7 +5,7 @@ class PangolinConan(ConanFile):
   name = "pangolin"
   version = "master"
   url = "https://github.com/amarburg/Pangolin_conan.git"
-  source_url = "https://github.com/amarburg/Pangolin.git"
+  source_url = "https://github.com/stevenlovegrove/Pangolin.git"
   commit = "master"
   settings = "os", "compiler", "build_type", "arch"
   options = {"shared": [True, False], "build_parallel": [True, False]}
@@ -22,7 +22,7 @@ class PangolinConan(ConanFile):
   def build(self):
     cmake = CMake(self.settings)
 
-    cmake_opts = "-DFORCE_GLUT=True  -DBUILD_EXAMPLES:BOOL=False"
+    cmake_opts = " -DBUILD_EXAMPLES:BOOL=False"
     cmake_opts += "-DBUILD_SHARED_LIBS=True" if self.options.shared else ""
 
     if self.options.build_parallel:
