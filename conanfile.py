@@ -23,10 +23,15 @@ class PangolinConan(ConanFile):
     cmake = CMake(self.settings)
 
     cmake_opts = " -DBUILD_EXAMPLES:BOOL=False"
-    cmake_opts += "-DBUILD_SHARED_LIBS=True" if self.options.shared else ""
+    cmake_opts += " -DBUILD_TESTS:BOOL=False"
+    cmake_opts += " -DBUILD_SHARED_LIBS=True" if self.options.shared else ""
 
     if self.options.build_parallel:
       build_opts = "-- -j"
+
+    ## Explicitly disable RPATH on OSX
+    if self.settings.os == "Macos":
+      cmake_opts += " -DCMAKE_SKIP_RPATH:BOOL=ON"
 
     self.run('cmake "%s/pangolin" %s %s' % (self.conanfile_directory, cmake.command_line, cmake_opts ))
     self.run('cmake --build . %s' % cmake.build_config)
