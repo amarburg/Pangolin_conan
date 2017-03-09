@@ -1,4 +1,4 @@
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, tools
 import os
 
 class PangolinConan(ConanFile):
@@ -20,7 +20,7 @@ class PangolinConan(ConanFile):
     self.run('cd pangolin && git checkout %s' % self.commit)
 
     if self.settings.os == "Macos":
-        self.run('cd pangolin && patch -p1 < ../patches/squelch_error_1280.patch')
+        tools.patch(patch_file="file.patch") ../patches/squelch_error_1280.patch')
 
   def build(self):
     cmake = CMake(self.settings)
