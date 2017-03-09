@@ -1,0 +1,13 @@
+diff --git a/include/pangolin/gl/glinclude.h b/include/pangolin/gl/glinclude.h
+index 513356d..1abe24b 100644
+--- a/include/pangolin/gl/glinclude.h
++++ b/include/pangolin/gl/glinclude.h
+@@ -38,7 +38,7 @@ namespace pangolin {
+ inline void _CheckGlDieOnError( const char *sFile, const int nLine )
+ {
+     GLenum glError = glGetError();
+-    if( glError != GL_NO_ERROR ) {
++    if( glError != GL_NO_ERROR && glError != 1280 ) {
+         pango_print_error( "OpenGL Error: %s (%d)\n", glErrorString(glError), glError );
+ 		pango_print_error("In: %s, line %d\n", sFile, nLine);
+     }
