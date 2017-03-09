@@ -7,9 +7,12 @@ class PangolinConan(ConanFile):
   url = "https://github.com/amarburg/Pangolin_conan.git"
   source_url = "https://github.com/stevenlovegrove/Pangolin.git"
   commit = "master"
+  
   settings = "os", "compiler", "build_type", "arch"
   options = {"shared": [True, False], "build_parallel": [True, False]}
   default_options = "shared=True", "build_parallel=True"
+
+  exports = "patches/*"
 
   def source(self):
     if not os.path.isdir('pangolin'):
@@ -19,8 +22,9 @@ class PangolinConan(ConanFile):
 
     self.run('cd pangolin && git checkout %s' % self.commit)
 
+    print(self.package_folder)
     if self.settings.os == "Macos":
-        tools.patch(patch_file="file.patch") ../patches/squelch_error_1280.patch')
+        tools.patch(base_path='pangolin', patch_file= "patches/squelch_error_1280.patch")
 
   def build(self):
     cmake = CMake(self.settings)
